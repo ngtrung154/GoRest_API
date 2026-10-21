@@ -11,20 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check GoREST API response time
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run GoREST Monitor
         run: |
-          curl -sS -o /dev/null \
-            -w 'HTTP_STATUS=%{http_code}\nRESPONSE_TIME=%{time_total}\n' \
-            https://gorest.co.in/public/v2/users
-
-      - name: Verify API response time under 800ms
-        run: |
-          response=$(curl -sS -o /dev/null -w '%{http_code} %{time_total}' https://gorest.co.in/public/v2/users)
-          status=$(echo "$response" | awk '{print $1}')
-          time=$(echo "$response" | awk '{print $2}')
-
-          echo "HTTP Status: $status"
-          echo "Response Time: ${time}s"
-
-          test "$status" = "200" || exit 1
-          awk -v t="$time" 'BEGIN { exit !(t < 0.8) }'
+          newman run 2474802010412_NguyenQuocTrung_GoRest.postman_collection.json \
+            --folder "Monitor"
