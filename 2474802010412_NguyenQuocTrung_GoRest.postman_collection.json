@@ -363,44 +363,6 @@
           "response": []
         }
       ]
-    },
-    {
-      "name": "Monitor",
-      "item": [
-        {
-          "name": "GET_API_Monitor",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"API hoạt động bình thường (Status 200)\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Thời gian phản hồi dưới 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});\r\n"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://gorest.co.in/public/v2/users",
-              "protocol": "https",
-              "host": [
-                "gorest",
-                "co",
-                "in"
-              ],
-              "path": [
-                "public",
-                "v2",
-                "users"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
     }
   ]
 }
