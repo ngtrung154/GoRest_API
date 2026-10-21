@@ -1,3 +1,4 @@
+
 name: GoREST API CI Pipeline
 
 on: push
@@ -23,7 +24,7 @@ jobs:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
           test -n "$GOREST_TOKEN" || { echo "Missing GOREST_TOKEN"; exit 1; }
-          newman run GoREST.postman_collection.json \
-            -e GoREST.postman_environment.json \
+          newman run 2474802010412_NguyenQuocTrung_GoRest.postman_collection.json \
+            -e 2474802010412_NguyenQuocTrung_GoRest_Env.postman_environment.json \
             --env-var "token=$GOREST_TOKEN" \
             -d users.csv
