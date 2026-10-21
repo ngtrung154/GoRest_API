@@ -1,0 +1,54 @@
+{
+  "info": {
+    "_postman_id": "83ba46ef-bb2f-4d81-a5f6-74926807c906",
+    "name": "2474802010412_NguyenQuocTrung_GoRest_Monitor",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59053261",
+    "_collection_link": "https://go.postman.co/collection/59053261-83ba46ef-bb2f-4d81-a5f6-74926807c906?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Monitor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "pm.test(\"API hoạt động bình thường (Status 200)\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Thời gian phản hồi dưới 800ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://gorest.co.in/public/v2/users",
+          "protocol": "https",
+          "host": [
+            "gorest",
+            "co",
+            "in"
+          ],
+          "path": [
+            "public",
+            "v2",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
