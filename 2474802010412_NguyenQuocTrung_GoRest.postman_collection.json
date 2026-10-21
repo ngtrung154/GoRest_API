@@ -1,0 +1,368 @@
+{
+  "info": {
+    "_postman_id": "ce2dc5e5-f649-4192-a3c6-907d0aa3576c",
+    "name": "2474802010412_NguyenQuocTrung_GoRest",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59053261",
+    "_collection_link": "https://go.postman.co/collection/59053261-ce2dc5e5-f649-4192-a3c6-907d0aa3576c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Positive_Cases",
+      "item": [
+        {
+          "name": "R1_Create_User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Tạo User thành công (Status 201)\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// Kiểm tra thông tin User khớp với dữ liệu đầu vào\r\npm.test(\"Thông tin User khớp với dữ liệu đầu vào\", function () {\r\n    var jsonData = pm.response.json();\r\n    var requestData = JSON.parse(pm.request.body.raw);\r\n\r\n    pm.expect(jsonData.name).to.eql(requestData.name);\r\n    pm.expect(jsonData.gender).to.eql(requestData.gender);\r\n    pm.expect(jsonData.email).to.eql(requestData.email);\r\n    pm.expect(jsonData.status).to.eql(requestData.status);\r\n});\r\n\r\n// Kiểm tra User ID\r\npm.test(\"User ID được tạo thành công\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.id).to.exist;\r\n});\r\n\r\n// Lưu User ID vào Environment\r\nif (pm.response.code === 201) {\r\n    var jsonData = pm.response.json();\r\n    pm.environment.set(\"userId\", jsonData.id);\r\n}\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Pham Minh Khoa\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"pham.khoa321@example.com\",\r\n    \"status\": \"active\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R2_Get_User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Lấy thông tin User thành công (Status 200)\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Kiểm tra User ID khớp với dữ liệu đã tạo\r\npm.test(\"User ID khớp với dữ liệu đã tạo\", function () {\r\n    var jsonData = pm.response.json();\r\n    var expectedId = pm.environment.get(\"userId\");\r\n\r\n    pm.expect(jsonData.id).to.eql(Number(expectedId));\r\n});\r\n"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "console.log(\"Đang GET User ID:\", pm.variables.get(\"userId\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R3_Update_User_Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Cập nhật User thành công (Status 200)\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Kiểm tra trạng thái User đã đổi thành inactive\r\npm.test(\"Trạng thái User đã chuyển thành inactive\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.status).to.eql(\"inactive\");\r\n});\r\n\r\n// Kiểm tra User ID không thay đổi\r\npm.test(\"User ID khớp với dữ liệu đã tạo\", function () {\r\n    var jsonData = pm.response.json();\r\n    var expectedId = pm.environment.get(\"userId\");\r\n\r\n    pm.expect(jsonData.id).to.eql(Number(expectedId));\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"inactive\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R4_DELETE_User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Xóa User thành công (Status 204)\", function () {\r\n    pm.response.to.have.status(204);\r\n});\r\n\r\n// Kiểm tra Response không có nội dung\r\npm.test(\"Response Body rỗng\", function () {\r\n    pm.expect(pm.response.text()).to.be.empty;\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative_Cases",
+      "item": [
+        {
+          "name": "R5_POST_Without_Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Từ chối tạo User không có Token (Status 401)\", function () {\r\n    pm.response.to.have.status(401);\r\n});\r\n\r\n// Kiểm tra thông báo lỗi\r\npm.test(\"API trả về thông báo Unauthorized\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.message).to.eql(\"Authentication failed\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n    \"name\": \"Hoang Minh Duc\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"hoangminhduc.test05@example.com\",\r\n    \"status\": \"active\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users/",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R6_POST_Duplicate_Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Từ chối User trùng Email (Status 422)\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\n// Kiểm tra lỗi trùng Email\r\npm.test(\"Thông báo Email đã tồn tại\", function () {\r\n    var jsonData = pm.response.json();\r\n\r\n    pm.expect(jsonData).to.be.an(\"array\");\r\n\r\n    var emailError = jsonData.find(function (item) {\r\n        return item.field === \"email\";\r\n    });\r\n\r\n    pm.expect(emailError).to.exist;\r\n    pm.expect(emailError.message).to.eql(\"has already been taken\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n    \"name\": \"Duplicate User\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"pham.khoa.68914123b01@example.com\",\r\n    \"status\": \"active\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users/",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R7_GET_Deleted_User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"User đã bị xóa (Status 404)\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\n// Kiểm tra thông báo User không tồn tại\r\npm.test(\"Thông báo User không tồn tại\", function () {\r\n    var jsonData = pm.response.json();\r\n\r\n    pm.expect(jsonData.message).to.eql(\"Resource not found\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
