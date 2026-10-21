@@ -22,7 +22,6 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
-      - name: Run GoREST Monitor
+      - name: Run GoREST API Monitor
         run: |
-          newman run 2474802010412_NguyenQuocTrung_GoRest.postman_collection.json \
-            --folder "Monitor"
+          newman run 2474802010412_NguyenQuocTrung_GoRest_Monitor.postman_collection.json
